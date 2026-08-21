@@ -30,8 +30,8 @@ X=df['text']
 y=df['label']
 
 X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2, 
-                                               random_state=42)
-
+                                               random_state=42,stratify=y)
+#stratify makes sure both train and test get the same ratio of spam-to-ham
 
 #------Convert word to number using Vectorizer--------------------------------
 
@@ -42,6 +42,8 @@ vect=TfidfVectorizer(stop_words='english',
                            max_features=5000)
 X_train_vect=vect.fit_transform(X_train)
 X_test_vect=vect.transform(X_test)
+
+#--------------------------------------Logistic-regression----------------------------------------
 
 
 from sklearn.linear_model import LogisticRegression
@@ -57,13 +59,21 @@ accuracy=accuracy_score(y_test, y_pred)
 clasfn_report=classification_report(y_test, y_pred)             
 conf_matrix=confusion_matrix(y_test, y_pred)          
 
+print (conf_matrix,"\n\n", accuracy,'\n\n', clasfn_report)
 
+#--------------------------------------Naivebayes------------------------
 
+from sklearn.naive_bayes import MultinomialNB
 
+model2=MultinomialNB()
+model2.fit(X_train_vect,y_train)
+y2_pred=model2.predict(X_test_vect)
 
+accuracy2=accuracy_score(y_test, y2_pred)
+clasfn_report2=classification_report(y_test, y2_pred)
+cm2=confusion_matrix(y_test, y2_pred)
 
-
-
+print (cm2,"\n\n", accuracy2,'\n\n', clasfn_report2)
 
 
 
