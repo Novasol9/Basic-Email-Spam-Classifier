@@ -75,13 +75,5 @@ cm2=confusion_matrix(y_test, y2_pred)
 
 print (cm2,"\n\n", accuracy2,'\n\n', clasfn_report2)
 
-
-
-
-
-
-
-
-
-
+#--------------------------------------Using pipeline--------------------------
 
