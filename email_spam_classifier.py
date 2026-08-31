@@ -77,3 +77,61 @@ print (cm2,"\n\n", accuracy2,'\n\n', clasfn_report2)
 
 #--------------------------------------Using pipeline--------------------------
 
+
+from sklearn.pipeline import Pipeline
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+Final_models={
+              'logisctic_regression':LogisticRegression(max_iter=1000),
+              'naive_bayes': MultinomialNB(),
+              'decision_tree': DecisionTreeClassifier(random_state=42),
+              'random_forest': RandomForestClassifier(random_state=42,n_estimators=100),
+              'knn':KNeighborsClassifier(n_neighbors=5),
+              'svc':SVC(kernel='linear',random_state=42)
+              }
+
+
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2, 
+                                               random_state=42,stratify=y)
+results=[]
+
+
+for name , model in Final_models.items():
+    
+
+    pipe=Pipeline([(
+        'tfidf',TfidfVectorizer(stop_words='english',max_features=5000)),
+        ('classifier', model)
+        ])
+
+    pipe.fit(X_train,y_train)
+    y_predict=pipe.predict(X_test)
+    
+    acc=accuracy_score(y_test, y_predict)
+    report_classfn=classification_report(y_test, y_predict)
+    conf_matrix=confusion_matrix(y_test, y_predict)
+    
+    print(f"{name}\nAccuracy: {acc}\n\n{report_classfn}\n\n{conf_matrix}\n{'-'*60}")
+
+    results.append({'Model': name, 'Accuracy': acc})
+
+
+
+
+
+results_df = pd.DataFrame(results).sort_values('Accuracy', ascending=False)
+print(results_df)
+
+
+
+
+
+
+
+
+
+
+
