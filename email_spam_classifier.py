@@ -125,6 +125,32 @@ for name , model in Final_models.items():
 results_df = pd.DataFrame(results).sort_values('Accuracy', ascending=False)
 print(results_df)
 
+#------------------------------using joblib----------------------------------------------
+
+import joblib
+
+best_pipe=Pipeline([
+    ('tfid',TfidfVectorizer(stop_words='english',max_features=5000 )),
+    ('classifier',SVC(kernel='linear',random_state=42))
+    ])
+
+
+best_pipe.fit(X_train,y_train)
+
+joblib.dump(best_pipe, 'svm_spam_classifier.pkl')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
